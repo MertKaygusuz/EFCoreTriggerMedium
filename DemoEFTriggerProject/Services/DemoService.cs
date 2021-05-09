@@ -45,12 +45,13 @@ namespace DemoEFTriggerProject.Services
 
         public async Task<IEnumerable<Users>> GetAllUsersAsync()
         {
-            return  await _dataContext.Users.ToListAsync();
+            return await _dataContext.Users.AsNoTracking().ToListAsync();
         }
 
         public async Task<string> GetJwtAsync(LoginModel model)
         {
-            var theUser = await _dataContext.Users.Where(x => x.Email == model.Email)
+            var theUser = await _dataContext.Users.AsNoTracking()
+                                                  .Where(x => x.Email == model.Email)
                                                   .SingleOrDefaultAsync();
 
             if (theUser is null || model.Password.VerifyPasswordHash(theUser.Password) is false)
@@ -113,7 +114,7 @@ namespace DemoEFTriggerProject.Services
 
         public async Task<IEnumerable<DbDemoClass>> GetAllDemoRecordsAsync()
         {
-            return await _dataContext.DbDemoClasses.ToListAsync();
+            return await _dataContext.DbDemoClasses.AsNoTracking().ToListAsync();
         }
     }
 }
